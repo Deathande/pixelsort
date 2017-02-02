@@ -6,6 +6,8 @@ except ImportError:
 import random as rand
 import constants
 import util
+from math import ceil
+from threading import Thread
 
 
 def edge(pixels, args):
@@ -50,7 +52,7 @@ def edge(pixels, args):
     return intervals
 
 
-def threshold(pixels, args):
+def threaded_threshold(pixels, args, interval):
     intervals = []
 
     print("Defining intervals...")
@@ -60,8 +62,25 @@ def threshold(pixels, args):
             if util.lightness(pixels[y][x]) < args.bottom_threshold or util.lightness(pixels[y][x]) > args.upper_threshold:
                 intervals[y].append(x)
         intervals[y].append(len(pixels[0]))
-    return intervals
+    interval.extend(intervals)
+    #return intervals
 
+def threshold(pixels, args):
+    intervals = []
+    threads = []
+    final = []
+    split_size = ceil(len(pixels) / args.threads)
+    for i in range(0, len(pixels), split_size):
+        intervals.append([])
+        threads.append(Thread(target=threaded_threshold, args=(pixels[i:i+split_size], args, intervals[-1])))
+        threads[-1].start()
+
+    for thread in threads:
+        thread.join()
+
+    for item in intervals:
+        final.extend(item)
+    return final
 
 def random(pixels, args):
     intervals = []

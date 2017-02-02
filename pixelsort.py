@@ -5,7 +5,7 @@ except ImportError:
 import sorter
 import argparams
 import util
-
+import time
 
 def main():
     print("Opening image...")
@@ -28,7 +28,10 @@ def main():
             pixels[y].append(data[x, y])
 
     print("Determining intervals...")
+    t1 = time.time()
     intervals = argparams.interval_function(pixels, argparams)
+    t2 = time.time()
+    print(t2 - t1)
 
     print("Sorting pixels...")
     sorted_pixels = sorter.sort_image(pixels, intervals, argparams)

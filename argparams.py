@@ -47,6 +47,7 @@ p.add_argument("-c", "--clength", type=int, help="Characteristic length of rando
 p.add_argument("-a", "--angle", type=float, help="Rotate the image by an angle (in degrees) before sorting", default=0)
 p.add_argument("-r", "--randomness", type=float, help="What percentage of intervals are NOT sorted", default=0)
 p.add_argument("-s", "--sorting_function", help="lightness, intensity, maximum, minimum", default="lightness")
+p.add_argument("-p", "--threads", help="Number of threads", default=1)
 __args = p.parse_args()
 
 image_input_path = __args.image
@@ -57,6 +58,7 @@ bottom_threshold = __args.threshold
 upper_threshold = __args.upper_threshold
 clength = __args.clength
 angle = __args.angle
+threads = __args.threads
 randomness = __args.randomness
 sorting_function = read_sorting_function()
 
